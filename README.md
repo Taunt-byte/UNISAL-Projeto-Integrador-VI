@@ -6,7 +6,7 @@ Status: Em desenvolvimento
 
 + Ferramentas integradas para a manuntençao de redes corporativas hierárquicas.
 
-## Texto Base do projeto 
+## Ideia Inicial
 
  + Por que usar uma ferramenta de monitoramento de infraestrutura de rede, no dia a dia, muito tempo pode ser desperdiçado na tentativa de diagnosticar o que está errado. 
  + Porém, com o monitoramento, a equipe de suporte pode resolver a situação antes que os usuários se deem conta de que algo ocorreu, obtendo agilidade nas correções e maior produtividade. 
