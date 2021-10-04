@@ -21,6 +21,7 @@ Tabela de conteúdos
       * [Combo](#combo)
    * [Tests](#testes)
    * [Tecnologias](#tecnologias)
+   * [Bibliografia](#Bibliografia)
 <!--te-->
 
 <h4 align="center"> 
@@ -36,7 +37,7 @@ Tabela de conteúdos
 
 ## Tabela de conteudo
 
-
+- [ ] Criar uma ferramenta que passe arquivos entres as redes
 - [ ] Criar uma ferramenta que monitorie a infraestrutura da rede e faça ajustes da rede
 - [ ] Diagnoticar e corrigir erros da rede
 - [ ] Resolver erros e produzir relatorios sobre os mesmo
@@ -47,3 +48,25 @@ Tabela de conteúdos
 ## Instalação
 
 ## Como usar
+
+  ### pre-requisitos
+
+  ### local-files
+
+  ### remote-files
+
+  ### multiple-files
+
+  ### combo
+
+## Testes
+
+## tecnologias
+
+## Bibliografia
+
+https://www.youtube.com/watch?v=v3zVT4HJxYI&ab_channel=B%C3%B3sonTreinamentos
+
+https://www.youtube.com/watch?v=z96M6O7mMhQ&ab_channel=FlynerPortugal
+
+https://towardsdatascience.com/3-cool-features-of-python-altair-deb3f432cc11
