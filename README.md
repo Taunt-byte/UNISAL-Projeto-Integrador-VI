@@ -21,7 +21,7 @@ Tabela de conteúdos
       * [Combo](#combo)
    * [Tests](#testes)
    * [Tecnologias](#tecnologias)
-   * [Bibliografia](#Bibliografia)
+   * [Bibliografia](#bibliografia)
 <!--te-->
 
 <h4 align="center"> 
@@ -49,19 +49,19 @@ Tabela de conteúdos
 
 ## Como usar
 
-  ### pre-requisitos
+### Pre-requisitos
 
-  ### local-files
+### Local-files
 
-  ### remote-files
+### Remote-files
 
-  ### multiple-files
+### Multiple-files
 
-  ### combo
+### Combo
 
 ## Testes
 
-## tecnologias
+## Tecnologias
 
 ## Bibliografia
 
