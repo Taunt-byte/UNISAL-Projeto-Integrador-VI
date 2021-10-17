@@ -49,15 +49,15 @@ Tabela de conteúdos
 
 ## Como usar
 
-### Pre-requisitos
+## Pre-requisitos
 
-### Local-files
+## Local-files
 
-### Remote-files
+## Remote-files
 
-### Multiple-files
+## Multiple-files
 
-### Combo
+## Combo
 
 ## Testes
 
