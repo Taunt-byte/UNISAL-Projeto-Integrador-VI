@@ -1,6 +1,6 @@
 # Example of getting stats out of pickle file
 import pickle
-from CheckServer import Server
+from checkServer import Server
 
 servers = pickle.load( open( "servers.pickle", "rb" ) )
 

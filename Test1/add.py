@@ -4,7 +4,7 @@
 # Could create a file to delete or modify servers as well
 
 import pickle
-from CheckServer import Server
+from checkServer import Server
 
 servers = pickle.load( open( "servers.pickle", "rb" ) )
 
