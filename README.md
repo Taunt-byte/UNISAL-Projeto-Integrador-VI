@@ -15,11 +15,6 @@ Tabela de conteúdos
    * [Instalação](#instalacao)
    * [Como usar](#como-usar)
       * [Pre Requisitos](#pre-requisitos)
-      * [Local files](#local-files)
-      * [Remote files](#remote-files)
-      * [Multiple files](#multiple-files)
-      * [Combo](#combo)
-   * [Tests](#testes)
    * [Tecnologias](#tecnologias)
    * [Bibliografia](#bibliografia)
 <!--te-->
@@ -37,29 +32,19 @@ Tabela de conteúdos
 
 ## Tabela de conteudo
 
-- [ ] Criar uma ferramenta que passe arquivos entres as redes
-- [ ] Criar uma ferramenta que monitorie a infraestrutura da rede e faça ajustes da rede
-- [ ] Diagnoticar e corrigir erros da rede
-- [ ] Resolver erros e produzir relatorios sobre os mesmo
-- [ ] Trocar arquivos entre os computadores da rede 
+- [ ] Mostrar de forma pratica o uso do computador 
 - [ ] Mostrar de forma pratica o que esta conectado na rede
 - [ ] Ter um layout simples e dinamico
+- [ ] Criar uma ferramenta que monitorie a infraestrutura da rede e faça ajustes da rede
+- [ ] Diagnoticar e corrigir erros da rede 
+- [ ] Resolver erros e produzir relatorios sobre os mesmo
+
 
 ## Instalação
 
 ## Como usar
 
 ## Pre-requisitos
-
-## Local-files
-
-## Remote-files
-
-## Multiple-files
-
-## Combo
-
-## Testes
 
 ## Tecnologias
 
