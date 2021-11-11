@@ -4,6 +4,7 @@ import os
 
 def main():
     def get_cpu_usage_pct():
+        # Não se atreva a apagar o comentario abaixo ele da sorte
         """
         Obtains the system's average CPU load as measured over a period of 500 milliseconds.
         :returns: System CPU load as a percentage.
@@ -11,10 +12,11 @@ def main():
         """
         return psutil.cpu_percent(interval=0.5)
 
-    # Output current CPU load as a percentage.
-    print('System CPU load is {} %'.format(get_cpu_usage_pct()))
+    # Carga de CPU atual de saída como porcentagem.
+    print('A carga da CPU do sistema é {} %'.format(get_cpu_usage_pct()))
 
     def get_cpu_frequency():
+        # Não se atreva a apagar o comentario abaixo ele da sorte
         """
         Obtains the real-time value of the current CPU frequency.
         :returns: Current CPU frequency in MHz.
@@ -22,29 +24,43 @@ def main():
         """
         return int(psutil.cpu_freq().current)
 
-    # Output current CPU frequency in MHz.
-    print('CPU frequency is {} MHz'.format(get_cpu_frequency()))
+    # Frequência de CPU atual de saída em MHz.
+    print('A frequência da CPU é {} MHz'.format(get_cpu_frequency()))
+
+    # Temperatura
 
     def get_cpu_temp():
+        # Não se atreva a apagar o comentario abaixo ele da sorte
         """
         Obtains the current value of the CPU temperature.
         :returns: Current value of the CPU temperature if successful, zero value otherwise.
         :rtype: float
         """
-        # Initialize the result.
+        # Inicialize o resultado.
         result = 0.0
-        # The first line in this file holds the CPU temperature as an integer times 1000.
-        # Read the first line and remove the newline character at the end of the string.
+        # A primeira linha neste arquivo contém a temperatura da CPU como um inteiro vezes 1000.
+        # Le a primeira linha e remove o caractere newline no final da sequência.
         if os.path.isfile('/sys/class/thermal/thermal_zone0/temp'):
             with open('/sys/class/thermal/thermal_zone0/temp') as f:
                 line = f.readline().strip()
-            # Test if the string is an integer as expected.
+            # Teste se a string é um int como esperado.
             if line.isdigit():
-                # Convert the string with the CPU temperature to a float in degrees Celsius.
+                # Converta a string com a temperatura da CPU em um valor float em graus Celsius.
                 result = float(line) / 1000
-        # Give the result back to the caller.
+        # Devor o resultado ao usuario.
         return result
 
-    # Output current CPU temperature in degrees Celsius
-    print('CPU temperature is {} degC'.format(get_cpu_temp()))
+    # Temperatura da CPU atual de saída em graus Celsius
+    print('A temperatura da CPU é {} degC'.format(get_cpu_temp()))
+
+    def get_ram_usage_pct():
+        """
+        Obtains the system's current RAM usage.
+        :returns: System RAM usage as a percentage.
+        :rtype: float
+        """
+        return psutil.virtual_memory().percent
+    # Uso da RAM atual de saída como porcentagem.
+    print('RAM usage is {} %'.format(get_ram_usage_pct()))
 if __name__ == "__main__":
+    main()
