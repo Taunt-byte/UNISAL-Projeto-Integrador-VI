@@ -4,7 +4,14 @@ O Python Package Index (PyPi) é um repositório on-line de pacotes Python, mant
 
 ## Install
 
-Para instalar o pacote PsUtil dentro do ambiente virtual do nosso projeto, abra a tela do terminal dentro do VsCode ou qualquer outra IDE. 
+Para instalar o pacote PsUtil dentro do ambiente virtual do nosso projeto, abra a tela do terminal dentro do VsCode ou qualquer outra IDE ou terminal.
     Em seguida, execute o comando:
 
-pip install "psutil"
+<code>pip install "psutil"</code>
+
+Para instalar o pacote pysimplegui abra a tela do terminal dentro do VsCode ou qualquer outra IDE ou terminal.
+    Em seguida, execute o comando:
+
+<code>pip install pysimplegui</code>
+ou
+<code>pip3 install pysimplegui</code>
