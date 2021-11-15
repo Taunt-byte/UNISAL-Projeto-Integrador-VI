@@ -61,6 +61,7 @@ def main():
         """
         return psutil.virtual_memory().percent
     # Uso da RAM atual de saída como porcentagem.
-    print('RAM usage is {} %'.format(get_ram_usage_pct()))
+    print('O uso de RAM é {} %'.format(get_ram_usage_pct()))
 if __name__ == "__main__":
     main()
+

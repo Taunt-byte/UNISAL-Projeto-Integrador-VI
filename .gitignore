@@ -1,3 +1,9 @@
+## VSCODE FILES
 .vscode
-
 .vs
+
+## Files .py não utilizados
+.venv
+
+## Pasta para testes
+test
