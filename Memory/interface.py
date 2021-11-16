@@ -1,5 +1,5 @@
 import PySimpleGUI as sg
-import CPUandMemory as get_ram_usage_pct
+import CPUandMemory as main
 
 sg.theme('DarkAmber')   # Add a touch of color
 # All the stuff inside your window.
