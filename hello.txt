@@ -1,1 +1,30 @@
-Hello  world!
+PRIMEIRA VEZ RODANDO
+---------------------------------
+requerimento
+python instalado e configurado 
+
+
+1º cmd com administrador
+2º pip install virtualenv
+3º mkdir LOCAL_DA_PASTA_MONITOR
+4º cd LOCAL_DA_PASTA_MONITOR
+5º virtualenv .venv
+6º venv\Scripts\activate
+7º pip install flask
+8º pip install httpagentparser
+9º criar conta em https://pusher.com/ e pegar as app keys
+10º pip install pusher
+11º python dbsetup.py
+12º abra o arquivo app.py e cole de acordo com a proxima etapa
+13º Substitua as chaves PUSHER_APP_ * pelos valores no painel do Pusher.
+14º flask run
+
+TODA VEZ QUE FOR RODAR DEPOIS DA PRIMEIRA VEZ
+---------------------------------
+
+1º cmd com administrador
+2º mkdir LOCAL_DA_PASTA_MONITOR
+3º cd LOCAL_DA_PASTA_MONITOR
+4º virtualenv .venv
+5º venv\Scripts\activate
+6º flask run
