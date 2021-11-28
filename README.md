@@ -58,6 +58,16 @@ Para instalar essa ferramente deve se seguir os sequintes passos
 13º Substitua as chaves PUSHER_APP_ * pelos valores no painel do Pusher.
 14º flask run
 
+TODA VEZ QUE FOR RODAR DEPOIS DA PRIMEIRA VEZ
+---------------------------------
+
+1º cmd com administrador
+2º mkdir LOCAL_DA_PASTA_MONITOR
+3º cd LOCAL_DA_PASTA_MONITOR
+4º virtualenv .venv
+5º venv\Scripts\activate
+6º flask run
+
 ## Como usar
 
 
