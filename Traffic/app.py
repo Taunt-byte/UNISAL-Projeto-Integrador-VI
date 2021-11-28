@@ -48,7 +48,7 @@ def getAnalyticsData():
     userInfo = httpagentparser.detect(request.headers.get('User-Agent'))
     userOS = userInfo['platform']['name']
     userBrowser = userInfo['browser']['name']
-    userIP = "72.229.28.185" if request.remote_addr == '127.0.0.1' else request.remote_addr
+    userIP = "186.209.89.123" if request.remote_addr == '127.0.0.1' else request.remote_addr
     api = "https://www.iplocate.io/api/lookup/" + userIP
     try:
         resp = urllib.request.urlopen(api)
