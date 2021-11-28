@@ -8,7 +8,8 @@ main{
     padding:40px;
     font-family: fantasy;
     color:#fff;
-    background-color: rgb(51,51,51);
+    background-color: rgba(33,37,41,255);
+
 }
 .intro{
     text-align:center;
@@ -22,4 +23,8 @@ main{
 }
 .intro-index h1{
     text-align:center;
+}
+.cada-login{
+    text-align:center;
+    
 }
