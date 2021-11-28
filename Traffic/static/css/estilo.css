@@ -4,8 +4,22 @@
     padding:0;
     text-align:center;
 }
-
+main{
+    padding:40px;
+    font-family: fantasy;
+    color:#fff;
+    background-color: rgb(51,51,51);
+}
 .intro{
     text-align:center;
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family:'Times New Roman', Times, serif;
+}
+.card{
+    color: #000;
+}
+.intro-index p{
+    text-align:justify;
+}
+.intro-index h1{
+    text-align:center;
 }
