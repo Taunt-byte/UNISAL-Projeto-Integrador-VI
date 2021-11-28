@@ -43,30 +43,29 @@ Tabela de conteúdos
 
 Para instalar essa ferramente deve se seguir os sequintes passos 
 
-1º cmd com administrador
-2º pip install virtualenv
-3º mkdir LOCAL_DA_PASTA_MONITOR
-4º cd LOCAL_DA_PASTA_MONITOR
-5º virtualenv .venv
-6º venv\Scripts\activate
-7º pip install flask
-8º pip install httpagentparser
-9º criar conta em https://pusher.com/ e pegar as app keys
-10º pip install pusher
-11º python dbsetup.py
-12º abra o arquivo app.py e cole de acordo com a proxima etapa
-13º Substitua as chaves PUSHER_APP_ * pelos valores no painel do Pusher.
-14º flask run
+1) cmd com administrador
+2) pip install virtualenv
+3) mkdir LOCAL_DA_PASTA_MONITOR
+4) cd LOCAL_DA_PASTA_MONITOR
+5) virtualenv .venv
+6) venv\Scripts\activate
+7) pip install flask
+8) pip install httpagentparser
+9) criar conta em https://pusher.com/ e pegar as app keys
+10) pip install pusher
+11) python dbsetup.py
+12) abra o arquivo app.py e cole de acordo com a proxima etapa
+13) Substitua as chaves PUSHER_APP_ * pelos valores no painel do Pusher.
+14) flask run
 
-TODA VEZ QUE FOR RODAR DEPOIS DA PRIMEIRA VEZ
----------------------------------
+## TODA VEZ QUE FOR RODAR DEPOIS DA PRIMEIRA VEZ
 
-1º cmd com administrador
-2º mkdir LOCAL_DA_PASTA_MONITOR
-3º cd LOCAL_DA_PASTA_MONITOR
-4º virtualenv .venv
-5º venv\Scripts\activate
-6º flask run
+1) cmd com administrador
+2) mkdir LOCAL_DA_PASTA_MONITOR
+3) cd LOCAL_DA_PASTA_MONITOR
+4) virtualenv .venv
+5) venv\Scripts\activate
+6) flask run
 
 ## Como usar
 
