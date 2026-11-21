@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block title %}Servidores{% endblock %}
+{% block heading %}Servidores e serviços{% endblock %}
+{% block subtitle %}Disponibilidade e latência verificadas a cada 30 segundos (teste de conexão TCP){% endblock %}
+
+{% block content %}
+<div class="row g-3 mb-3">
+  <div class="col-6 col-xl-3"><div class="panel kpi">
+    <div class="kpi-icon bg-ok-soft"><i class="bi bi-check2-circle"></i></div>
+    <div><div class="kpi-label">Online</div><div class="kpi-value" id="k-on">—</div></div>
+  </div></div>
+  <div class="col-6 col-xl-3"><div class="panel kpi">
+    <div class="kpi-icon bg-bad-soft"><i class="bi bi-x-circle"></i></div>
+    <div><div class="kpi-label">Offline</div><div class="kpi-value" id="k-off">—</div></div>
+  </div></div>
+  <div class="col-6 col-xl-3"><div class="panel kpi">
+    <div class="kpi-icon bg-accent-soft"><i class="bi bi-stopwatch"></i></div>
+    <div><div class="kpi-label">Latência média</div><div class="kpi-value" id="k-lat">—</div></div>
+  </div></div>
+  <div class="col-6 col-xl-3"><div class="panel kpi">
+    <div class="kpi-icon bg-purple-soft"><i class="bi bi-percent"></i></div>
+    <div><div class="kpi-label">Disponibilidade média</div><div class="kpi-value" id="k-up">—</div></div>
+  </div></div>
+</div>
+
+<div class="row g-3 mb-3">
+  <div class="col-12"><div class="panel">
+    <div class="panel-title"><i class="bi bi-server"></i> Monitorados
+      <button class="btn btn-sm btn-outline-primary ms-auto" id="btnCheck"><i class="bi bi-arrow-repeat"></i> Verificar agora</button>
+    </div>
+    <div class="table-responsive">
+      <table class="table align-middle mb-0">
+        <thead><tr><th>Status</th><th>Nome</th><th>Endereço</th><th>Latência</th><th>Disponibilidade</th><th>Últimas verificações</th><th>Verificado</th><th></th></tr></thead>
+        <tbody id="servers"></tbody>
+      </table>
+    </div>
+  </div></div>
+</div>
+
+<div class="row g-3">
+  <div class="col-xl-8"><div class="panel">
+    <div class="panel-title"><i class="bi bi-graph-up"></i> Latência (ms)</div>
+    <div class="chart-box sm"><canvas id="latChart"></canvas></div>
+  </div></div>
+  <div class="col-xl-4"><div class="panel">
+    <div class="panel-title"><i class="bi bi-plus-circle"></i> Adicionar servidor</div>
+    <form id="addForm" class="vstack gap-2">
+      <input class="form-control" name="name" placeholder="Nome (ex.: Impressora do RH)" required>
+      <input class="form-control" name="host" placeholder="Endereço (ex.: 192.168.0.10 ou site.com)" required>
+      <input class="form-control" name="port" type="number" min="1" max="65535" placeholder="Porta (ex.: 80, 443, 22, 3389)" required>
+      <button class="btn btn-primary"><i class="bi bi-plus"></i> Adicionar</button>
+      <div class="small text-danger" id="formError"></div>
+      <div class="small text-secondary">Dica: portas comuns — 80 (HTTP), 443 (HTTPS), 22 (SSH), 53 (DNS), 3389 (Área de Trabalho Remota), 9100 (impressoras).</div>
+    </form>
+  </div></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const lat = new Chart(document.getElementById('latChart'), {
+  type: 'line', data: { labels: [], datasets: [] },
+  options: { maintainAspectRatio: false, spanGaps: true, interaction: { mode: 'index', intersect: false },
+             scales: { y: { beginAtZero: true, ticks: { callback: v => v + ' ms' } } } },
+});
+
+async function load() {
+  const list = await getJSON('/api/servers');
+  const checked = list.filter(s => s.online !== null);
+  const on = checked.filter(s => s.online);
+  setText('k-on', on.length);
+  setText('k-off', checked.length - on.length);
+  setText('k-lat', on.length ? (on.reduce((a, s) => a + s.latency, 0) / on.length).toFixed(0) + ' ms' : '—');
+  setText('k-up', checked.length ? (checked.reduce((a, s) => a + s.uptime, 0) / checked.length).toFixed(1) + '%' : '—');
+
+  document.getElementById('servers').innerHTML = list.map(s => `
+    <tr>
+      <td><span class="status-dot ${s.online === null ? 'wait' : s.online ? 'on' : 'off'}"></span>
+          ${s.online === null ? '<span class="text-secondary">aguardando</span>' : s.online ? 'Online' : '<span class="text-danger">Offline</span>'}</td>
+      <td class="fw-semibold">${escapeHtml(s.name)}</td>
+      <td class="text-secondary">${escapeHtml(s.host)}:${s.port}</td>
+      <td>${s.latency != null ? s.latency + ' ms' : '—'}</td>
+      <td>${s.uptime != null ? s.uptime + '%' : '—'}</td>
+      <td><div class="uptime-bar">${s.history.map(h => `<span class="${h.online ? '' : 'off'}" title="${h.t}"></span>`).join('')}</div></td>
+      <td class="text-secondary small" title="${escapeHtml(s.error || '')}">${s.checked_at || '—'}</td>
+      <td><button class="btn btn-sm btn-outline-danger" onclick="removeServer(${s.id})" title="Remover"><i class="bi bi-trash"></i></button></td>
+    </tr>`).join('');
+
+  // gráfico: uma linha por servidor, usando o histórico de verificações
+  const longest = list.reduce((a, s) => s.history.length > a.length ? s.history : a, []);
+  lat.data.labels = longest.map(h => h.t);
+  lat.data.datasets = list.map((s, i) => ({
+    label: s.name, data: s.history.map(h => h.latency), borderColor: COLORS[i % COLORS.length],
+    tension: 0.3, pointRadius: 2, borderWidth: 2,
+  }));
+  lat.update('none');
+}
+
+async function removeServer(id) {
+  if (!confirm('Remover este servidor do monitoramento?')) return;
+  await fetch('/api/servers/' + id, { method: 'DELETE' });
+  load();
+}
+
+document.getElementById('btnCheck').onclick = async () => {
+  await fetch('/api/servers/check', { method: 'POST' });
+  setTimeout(load, 2500);
+};
+
+document.getElementById('addForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const body = Object.fromEntries(new FormData(e.target));
+  const r = await fetch('/api/servers', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  if (!r.ok) { setText('formError', (await r.json()).error); return; }
+  setText('formError', '');
+  e.target.reset();
+  setTimeout(load, 2500);
+};
+
+every(10000, load);
+</script>
+{% endblock %}

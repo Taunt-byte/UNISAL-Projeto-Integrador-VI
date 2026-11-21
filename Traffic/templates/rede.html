@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}Tráfego de rede{% endblock %}
+{% block heading %}Tráfego de rede{% endblock %}
+{% block subtitle %}Consumo de dados por interface de rede deste servidor{% endblock %}
+
+{% block content %}
+<div class="row g-3 mb-3">
+  <div class="col-6 col-xl-3"><div class="panel kpi">
+    <div class="kpi-icon bg-ok-soft"><i class="bi bi-cloud-download"></i></div>
+    <div><div class="kpi-label">Recebido (sessão)</div><div class="kpi-value" id="k-recv">—</div>
+      <div class="kpi-sub" id="k-recv-rate"></div></div>
+  </div></div>
+  <div class="col-6 col-xl-3"><div class="panel kpi">
+    <div class="kpi-icon bg-warn-soft"><i class="bi bi-cloud-upload"></i></div>
+    <div><div class="kpi-label">Enviado (sessão)</div><div class="kpi-value" id="k-sent">—</div>
+      <div class="kpi-sub" id="k-sent-rate"></div></div>
+  </div></div>
+  <div class="col-6 col-xl-3"><div class="panel kpi">
+    <div class="kpi-icon bg-purple-soft"><i class="bi bi-calendar3"></i></div>
+    <div><div class="kpi-label">Projeção mensal</div><div class="kpi-value" id="k-proj">—</div>
+      <div class="kpi-sub">no ritmo atual de consumo</div></div>
+  </div></div>
+  <div class="col-6 col-xl-3"><div class="panel kpi">
+    <div class="kpi-icon bg-accent-soft"><i class="bi bi-diagram-3"></i></div>
+    <div><div class="kpi-label">Conexões ativas</div><div class="kpi-value" id="k-conn">—</div>
+      <div class="kpi-sub" id="k-time"></div></div>
+  </div></div>
+</div>
+
+<div class="row g-3 mb-3">
+  <div class="col-12"><div class="panel">
+    <div class="panel-title"><i class="bi bi-graph-up"></i> Velocidade em tempo real</div>
+    <div class="chart-box"><canvas id="netChart"></canvas></div>
+  </div></div>
+</div>
+
+<div class="row g-3">
+  <div class="col-xl-8"><div class="panel">
+    <div class="panel-title"><i class="bi bi-ethernet"></i> Interfaces de rede</div>
+    <div class="table-responsive">
+      <table class="table table-sm align-middle mb-0">
+        <thead><tr><th>Interface</th><th>Download</th><th>Upload</th><th>Total recebido</th><th>Total enviado</th><th>Erros / descartes</th></tr></thead>
+        <tbody id="nics"><tr><td colspan="6" class="text-secondary">Coletando dados…</td></tr></tbody>
+      </table>
+    </div>
+  </div></div>
+  <div class="col-xl-4"><div class="panel">
+    <div class="panel-title"><i class="bi bi-pie-chart"></i> Consumo por interface</div>
+    <div class="chart-box sm"><canvas id="nicChart"></canvas></div>
+  </div></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const net = lineChart('netChart', [{ label: 'Download', color: '#2ecc8f' }, { label: 'Upload', color: '#f5b041' }], { tick: formatRate });
+const nicChart = doughnutChart('nicChart');
+nicChart.options.plugins.tooltip = { callbacks: { label: c => c.label + ': ' + formatBytes(c.parsed) } };
+
+every(2000, async () => {
+  const s = await getJSON('/api/system');
+  const h = s.history;
+  setLineData(net, h.map(p => p.t), [h.map(p => p.recv), h.map(p => p.sent)]);
+  setText('k-recv', formatBytes(s.total_recv));
+  setText('k-sent', formatBytes(s.total_sent));
+  if (s.current) {
+    setText('k-recv-rate', 'agora: ' + formatRate(s.current.recv));
+    setText('k-sent-rate', 'agora: ' + formatRate(s.current.sent));
+  }
+  setText('k-proj', formatBytes(s.monthly_projection));
+  setText('k-conn', s.connections == null ? 'n/d' : s.connections);
+  setText('k-time', 'monitorando há ' + formatDuration(s.monitoring_seconds));
+
+  // ordena as interfaces mais usadas primeiro e esconde as que nunca trafegaram nada
+  const nics = Object.entries(s.interfaces)
+    .filter(([, n]) => n.bytes_sent + n.bytes_recv > 0)
+    .sort((a, b) => (b[1].bytes_sent + b[1].bytes_recv) - (a[1].bytes_sent + a[1].bytes_recv));
+  if (nics.length) {
+    document.getElementById('nics').innerHTML = nics.map(([name, n]) => `
+      <tr><td><i class="bi bi-ethernet text-secondary me-1"></i>${escapeHtml(name)}</td>
+      <td class="text-success">${formatRate(n.recv_rate)}</td><td class="text-warning">${formatRate(n.sent_rate)}</td>
+      <td>${formatBytes(n.bytes_recv)}</td><td>${formatBytes(n.bytes_sent)}</td>
+      <td class="${n.errors + n.drops ? 'text-danger' : 'text-secondary'}">${n.errors} / ${n.drops}</td></tr>`).join('');
+    setDictData(nicChart, Object.fromEntries(nics.map(([name, n]) => [name, n.bytes_sent + n.bytes_recv])));
+  }
+});
+</script>
+{% endblock %}

@@ -1,205 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Dispositivos{% endblock %}
+{% block heading %}Dispositivos e acessos{% endblock %}
+{% block subtitle %}Quem acessou o sistema: IP, localização, sistema operacional, navegador e páginas visitadas{% endblock %}
+{% block head %}
+<link href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+{% endblock %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--Custon CSS-->
-    <link type="text/css" rel="stylesheet" media="screen" href="/Traffic/static/css/estilo.css" />
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <!--Icon site-->
-    <link rel="shortcut icon" href="/img/icon.png">
-    <title>Projeto Integrador 6</title>
-</head>
-<body id="page-top">
+{% block content %}
+<div class="row g-3 mb-3">
+  <div class="col-6 col-xl-3"><div class="panel kpi">
+    <div class="kpi-icon bg-accent-soft"><i class="bi bi-person-badge"></i></div>
+    <div><div class="kpi-label">Sessões</div><div class="kpi-value" id="total-sessions">0</div></div>
+  </div></div>
+  <div class="col-6 col-xl-3"><div class="panel kpi">
+    <div class="kpi-icon bg-purple-soft"><i class="bi bi-pc-display"></i></div>
+    <div><div class="kpi-label">Dispositivos únicos (IP)</div><div class="kpi-value" id="total-visitors">0</div></div>
+  </div></div>
+  <div class="col-6 col-xl-3"><div class="panel kpi">
+    <div class="kpi-icon bg-ok-soft"><i class="bi bi-eye"></i></div>
+    <div><div class="kpi-label">Visualizações de página</div><div class="kpi-value" id="total-pageviews">0</div></div>
+  </div></div>
+  <div class="col-6 col-xl-3"><div class="panel kpi">
+    <div class="kpi-icon bg-warn-soft"><i class="bi bi-file-earmark"></i></div>
+    <div><div class="kpi-label">Páginas únicas por sessão</div><div class="kpi-value" id="unique-pageviews">0</div></div>
+  </div></div>
+</div>
 
-<!-- NavBar-->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="#">Projeto Integrador 6</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav">
-      <li class="nav-item ">
-        <a class="nav-link" href="index.html">Inicio</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link " href="dashboard-single.html">Dashboard Admin</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link active" href="dashboard.html">Dashboard<span class="sr-only"> (Atual)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="about.html">Sobre</a>
-      </li>
-    </ul>
+<div class="row g-3 mb-3">
+  <div class="col-xl-4"><div class="panel">
+    <div class="panel-title"><i class="bi bi-windows"></i> Sistemas operacionais</div>
+    <div class="chart-box sm"><canvas id="osChart"></canvas></div>
+  </div></div>
+  <div class="col-xl-4"><div class="panel">
+    <div class="panel-title"><i class="bi bi-browser-chrome"></i> Navegadores</div>
+    <div class="chart-box sm"><canvas id="browserChart"></canvas></div>
+  </div></div>
+  <div class="col-xl-4"><div class="panel">
+    <div class="panel-title"><i class="bi bi-globe-americas"></i> Países</div>
+    <div class="chart-box sm"><canvas id="countryChart"></canvas></div>
+  </div></div>
+</div>
+
+<div class="row g-3 mb-3">
+  <div class="col-xl-7"><div class="panel">
+    <div class="panel-title"><i class="bi bi-clock-history"></i> Novas sessões por hora do dia</div>
+    <div class="chart-box sm"><canvas id="hourChart"></canvas></div>
+  </div></div>
+  <div class="col-xl-5"><div class="panel">
+    <div class="panel-title"><i class="bi bi-bar-chart"></i> Páginas mais acessadas</div>
+    <div class="chart-box sm"><canvas id="pagesChart"></canvas></div>
+  </div></div>
+</div>
+
+<div class="panel">
+  <div class="panel-title"><i class="bi bi-table"></i> Sessões registradas
+    <span class="ms-auto d-flex gap-2 align-items-center">
+      <span class="small text-secondary" id="demoInfo"></span>
+      <button class="btn btn-sm btn-outline-primary" id="btnDemo" title="Cria acessos fictícios para demonstrar o painel">
+        <i class="bi bi-magic"></i> Gerar dados de demonstração</button>
+      <button class="btn btn-sm btn-outline-secondary" id="btnClear"><i class="bi bi-eraser"></i> Limpar demonstração</button>
+      <a class="btn btn-sm btn-outline-success" href="/minha-sessao"><i class="bi bi-person"></i> Minha sessão</a>
+    </span>
   </div>
-</nav>
-<main>
-  <div class="content-wrapper">
-    <div class="container-fluid">
-    
-      <!-- Breadcrumbs-->
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <a href="#">Dashboard</a>
-        </li>
-        <li class="breadcrumb-item active">Minha Dashboard</li>
-      </ol>
-      
-      <!-- Icon Cards-->
-      <div class="row">
-        <div class="col-xl-3 col-sm-6 mb-3">
-          <div class="card text-white bg-primary o-hidden h-100">
-            <div class="card-body">
-              <div class="mr-5">Sessão total<span id="total-sessions">26</span></div>
-            </div>
-            <a class="card-footer text-white clearfix small z-1" href="#">
-              <span class="float-left">Ver detalhes</span>
-              <span class="float-right">
-                <i class="fa fa-angle-right"></i>
-              </span>
-            </a>
-          </div>
-        </div>
-        <!-- Total de visitantes valor total -->
-        <div class="col-xl-3 col-sm-6 mb-3">
-          <div class="card text-white bg-primary o-hidden h-100">
-            <div class="card-body">
-              <div class="mr-5">Total de visitantes <span id="total-visitors">26</span></div>
-            </div>
-            <a class="card-footer text-white clearfix small z-1" href="#">
-              <span class="float-left">Ver detalhes</span>
-              <span class="float-right">
-                <i class="fa fa-angle-right"></i>
-              </span>
-            </a>
-          </div>
-        </div>
-        <!-- Total de visitantes valor unico-->
-        <div class="col-xl-3 col-sm-6 mb-3">
-          <div class="card text-white bg-success   o-hidden h-100">
-            <div class="card-body">
-              <div class="mr-5">Total de visitantes a pagina <span id="total-pageviews">123</span></div>
-            </div>
-            <a class="card-footer text-white clearfix small z-1" href="#">
-              <span class="float-left">Ver detalhes</span>
-              <span class="float-right">
-                <i class="fa fa-angle-right"></i>
-              </span>
-            </a>
-          </div>
-        </div>
-        <!-- Total de visitantes Valor das paginas exclusivas -->
-        <div class="col-xl-3 col-sm-6 mb-3">
-          <div class="card text-white bg-success  o-hidden h-100">
-            <div class="card-body">
-              <div class="mr-5">Visualizações de página exclusivas <span id="unique-pageviews">123</span></div>
-            </div>
-            <a class="card-footer text-white clearfix small z-1" href="#">
-              <span class="float-left">Ver detalhes</span>
-              <span class="float-right">
-                <i class="fa fa-angle-right"></i>
-              </span>
-            </a>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Example DataTables Card-->
-      <div class="card mb-3">
-        <div class="card-header">
-          <i class="fa fa-table"></i> Sessões de usuário</div>
-        <div class="card-body">
-          <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-              <thead>
-                <tr>
-                  <th>Tempo</th>
-                  <th>IP do usuario</th>
-                  <th>Continente</th>
-                  <th>Pais</th>
-                  <th>Cidade</th>
-                  <th>Sistema Operacional</th>
-                  <th>Browser</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tfoot>
-                <tr>
-                  <th>Tempo</th>
-                  <th>IP do usuario</th>
-                  <th>Continente</th>
-                  <th>Pais</th>
-                  <th>Cidade</th>
-                  <th>Sistema Operacional</th>
-                  <th>Browser</th>
-                  <th></th>
-                </tr>
-              </tfoot>
-              <tbody id="customer-table">
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="card-footer small text-muted">Ultima atualização as <span id="session-update-time"></span></div>
-      </div>
-    </div>
-  </main>
-    <!--Roda Pé-->
-    <footer class="sticky-footer">
-      <div class="container">
-        <div class="text-center">
-          <small>Projeto Integrador 2021</small>
-        </div>
-      </div>
-    </footer>
-    
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-      <i class="fa fa-angle-up"></i>
-    </a>
-    
-    <!-- Logout Modal-->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Tem certeza que quer sair ?</h5>
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div class="modal-body">Selecione "Logout" abaixo se estiver pronto para encerrar sua sessão atual.</div>
-          <div class="modal-footer">
-            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-            <a class="btn btn-primary" href="login.html">Logout</a>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Bootstrap core JavaScript-->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
-    <!-- Page level plugin JavaScript-->
-    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
-    <script src="https://js.pusher.com/4.0/pusher.min.js"></script>
-    <!-- Custom scripts for this page-->
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/sb-admin.js') }}"></script>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-  
+  <div class="table-responsive">
+    <table class="table table-sm align-middle" id="dataTable" width="100%">
+      <thead><tr><th>Data/hora</th><th>IP</th><th>Continente</th><th>País</th><th>Cidade</th><th>Sistema</th><th>Navegador</th><th></th></tr></thead>
+      <tbody></tbody>
+    </table>
   </div>
-</body>
-</html>
+  <div class="small text-secondary mt-2">Última atualização: <span id="session-update-time"></span></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% endblock %}

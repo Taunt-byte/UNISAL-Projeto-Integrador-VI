@@ -1,93 +1,113 @@
 <p align="center">
-  <a href="https://unform.dev">
-    <img src="img/Logo.png" height="150" width="175" alt="Unform" />
-  </a>
+  <img src="img/Logo.png" height="140" alt="Logo do projeto" />
 </p>
-<h1 align="center">Projeto Integrador VI</h1> 
 
-<p align="center">O projeto desse semestre tem como tema as ferramentas integradas para a manuntençao de redes corporativas hierárquicas.</p>
+<h1 align="center">NetMonitor — Controle de tráfego de redes corporativas</h1>
 
-Tabela de conteúdos
-=================
-<!--ts-->
-   * [Sobre](#Sobre)
-   * [Tabela de Conteudo](#tabela-de-conteudo)
-   * [Instalação](#instalacao)
-   * [Como usar](#como-usar)
-      * [Pre Requisitos](#pre-requisitos)
-   * [Tecnologias](#tecnologias)
-   * [Bibliografia](#bibliografia)
-<!--te-->
+<p align="center">
+  Projeto Integrador VI · Engenharia da Computação · UNISAL · jul–out 2021<br>
+  <img src="https://img.shields.io/badge/Python-3.9+-3776AB?logo=python&logoColor=white">
+  <img src="https://img.shields.io/badge/Flask-000000?logo=flask">
+  <img src="https://img.shields.io/badge/SQLite-003B57?logo=sqlite">
+  <img src="https://img.shields.io/badge/Chart.js-FF6384?logo=chartdotjs&logoColor=white">
+  <img src="https://img.shields.io/badge/Bootstrap_5-7952B3?logo=bootstrap&logoColor=white">
+</p>
 
-<h4 align="center"> 
-	🚧  Em desenvolvimento.  🚧
-</h4>
+Sistema web de monitoramento de redes corporativas que registra o tráfego de rede, a disponibilidade
+dos servidores e os dispositivos que acessam o sistema. A partir desses dados é possível identificar
+oportunidades de **redução do consumo de dados** e, consequentemente, **de custos**.
 
-## Sobre
+![Visão geral](img/prints/visao-geral.png)
 
- + Por que usar uma ferramenta de monitoramento de infraestrutura de rede, no dia a dia, muito tempo pode ser desperdiçado na tentativa de diagnosticar o que está errado. 
- + Porém, com o monitoramento, a equipe de suporte pode resolver a situação antes que os usuários se deem conta de que algo ocorreu, obtendo agilidade nas correções e maior produtividade. 
- + Em organizações de todos os portes e segmentos, a quantidade de dispositivos conectados tem aumentado bastante.
- + Como os diferentes aparelhos evoluem constantemente, é fundamental que os administradores saibam com precisão o que está conectado à rede e se a estrutura de TI disponível está devidamente preparada para lidar com essa realidade.
+## Funcionalidades
 
-## Tabela de conteudo
+- **Tráfego de rede em tempo real** — velocidade de download/upload por interface, total consumido,
+  erros e pacotes descartados, conexões ativas e **projeção de consumo mensal** no ritmo atual.
+- **Monitoramento de servidores** — testa a conexão TCP com servidores e serviços cadastrados
+  (sites, DNS, impressoras, SSH, área de trabalho remota…) a cada 30 s, mostrando status, latência,
+  histórico e disponibilidade (%). Servidores podem ser adicionados/removidos pela interface.
+- **CPU e memória** do servidor em gráficos ao vivo.
+- **Alertas automáticos** — servidor fora do ar, latência alta, CPU ou memória acima do limite.
+- **Registro de dispositivos** — IP, geolocalização, sistema operacional e navegador de cada acesso,
+  com gráficos por sistema, navegador, país, horário e páginas mais acessadas.
+- **Modo demonstração** — gera acessos fictícios (marcados como "demo") para apresentar o painel.
+- **API REST em JSON** que alimenta todos os gráficos.
 
-- [ ] Mostrar de forma pratica o uso do computador 
-- [X] Mostrar de forma pratica o que esta conectado na rede
-- [X] Ter um layout simples e dinamico
-- [ ] Criar uma ferramenta que monitorie a infraestrutura da rede e faça ajustes da rede
-- [ ] Diagnoticar e corrigir erros da rede 
-- [ ] Resolver erros e produzir relatorios sobre os mesmo
+| Tráfego de rede | Servidores | Dispositivos |
+|---|---|---|
+| ![Rede](img/prints/rede.png) | ![Servidores](img/prints/servidores.png) | ![Dispositivos](img/prints/dispositivos.png) |
 
-## Instalação
+## Como rodar
 
-Para instalar essa ferramente deve se seguir os sequintes passos 
+Pré-requisito: [Python 3.9+](https://www.python.org/downloads/) (no Windows, marque *Add Python to PATH*).
 
-1) cmd com administrador
-2) pip install virtualenv
-3) mkdir LOCAL_DA_PASTA_MONITOR
-4) cd LOCAL_DA_PASTA_MONITOR
-5) virtualenv .venv
-6) venv\Scripts\activate
-7) pip install flask
-8) pip install httpagentparser
-9) criar conta em https://pusher.com/ e pegar as app keys
-10) pip install pusher
-11) python dbsetup.py
-12) abra o arquivo app.py e cole de acordo com a proxima etapa
-13) Substitua as chaves PUSHER_APP_ * pelos valores no painel do Pusher.
-14) flask run
+**Windows:** dois cliques em `Traffic\iniciar.bat`.
 
-## TODA VEZ QUE FOR RODAR DEPOIS DA PRIMEIRA VEZ
+**Qualquer sistema:**
 
-1) cmd com administrador
-2) mkdir LOCAL_DA_PASTA_MONITOR
-3) cd LOCAL_DA_PASTA_MONITOR
-4) virtualenv .venv
-5) venv\Scripts\activate
-6) flask run
+```bash
+cd Traffic
+python -m venv .venv
+.venv\Scripts\activate        # Linux/macOS: source .venv/bin/activate
+pip install -r requirements.txt
+python app.py                  # acesse http://127.0.0.1:5000
+```
 
-## Como usar
+Para que outros dispositivos da rede (celulares, outros PCs) acessem e apareçam no painel:
+`python app.py --rede` e abra `http://IP_DO_COMPUTADOR:5000` (libere a porta 5000 no firewall).
 
+O banco SQLite é criado automaticamente na primeira execução.
 
+## Arquitetura
 
-## Pre-requisitos
+```
+Navegador ──(HTML + Chart.js, atualiza a cada 2–10 s)──► Flask (app.py)
+                                                          │
+                     ┌────────────────────────────────────┼─────────────────────────┐
+                     ▼                                    ▼                         ▼
+        monitor.py · SystemMonitor            monitor.py · ServerChecker      dbsetup.py · SQLite
+        (thread: psutil a cada 2 s —          (thread: conexão TCP a cada     (sessões, páginas,
+         CPU, RAM, bytes por interface)        30 s — status e latência)        servidores)
+```
 
-Python devidamente instalado em sua maquina
-Git devidamente instalado em sua maquina
-Uma boa IDE
+| Rota | Descrição |
+|---|---|
+| `/` | Visão geral: KPIs, tráfego, CPU/RAM, alertas e servidores |
+| `/rede` | Tráfego por interface e projeção de consumo |
+| `/servidores` | Status, latência e disponibilidade dos servidores |
+| `/dashboard` | Dispositivos que acessaram o sistema |
+| `/api/system` · `/api/servers` · `/api/sessions` · `/api/stats` · `/api/charts` · `/api/alerts` | API JSON |
 
-## Tecnologias
+## Estrutura
 
+```
+Traffic/
+├── app.py            # rotas Flask e API
+├── monitor.py        # coleta de métricas e verificação de servidores (threads)
+├── dbsetup.py        # banco de dados SQLite
+├── templates/        # páginas (Jinja2 + Bootstrap 5)
+└── static/           # CSS e JavaScript (gráficos)
+Memory/               # versão desktop do monitor de CPU/RAM (FreeSimpleGUI)
+```
 
+## Monitor desktop de CPU e RAM
+
+```bash
+cd Memory
+pip install -r requirements.txt
+python interface.py
+```
+
+## Histórico
+
+A versão original (2021) usava o serviço Pusher e a API iplocate.io, que deixaram de funcionar.
+Em 2026 o projeto foi revisado: as dependências externas pagas foram removidas, foram adicionados o
+monitoramento real de tráfego de rede, de servidores e de recursos do sistema, alertas, gráficos e
+uma nova interface.
 
 ## Bibliografia
 
-+ Canais e documentos dos quias usamos para estudo para criar essa ferramenta 
-
-https://www.youtube.com/watch?v=v3zVT4HJxYI&ab_channel=B%C3%B3sonTreinamentos
-
-https://www.youtube.com/watch?v=z96M6O7mMhQ&ab_channel=FlynerPortugal
-
-https://towardsdatascience.com/3-cool-features-of-python-altair-deb3f432cc11
-
+- [Bóson Treinamentos — Redes de computadores](https://www.youtube.com/watch?v=v3zVT4HJxYI)
+- [Flyner Portugal](https://www.youtube.com/watch?v=z96M6O7mMhQ)
+- [Documentação do psutil](https://psutil.readthedocs.io/)
+- [Documentação do Flask](https://flask.palletsprojects.com/)

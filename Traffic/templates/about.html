@@ -1,85 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Sobre o projeto{% endblock %}
+{% block heading %}Sobre o projeto{% endblock %}
+{% block subtitle %}Controle de tráfego de redes corporativas por software de gestão de dados · jul–out 2021{% endblock %}
 
-<!DOCTYPE html>
-<html>
-<head>
-        <!-- Required meta tags -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!--Custon CSS-->
-        <link type="text/css" rel="stylesheet" media="screen" href="/Traffic/static/css/estilo.css" />
-        <!-- Bootstrap CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-        <!--Icon site-->
-        <link rel="shortcut icon" href="img/icon.jpg">
-        <title>Projeto Integrador 6</title>
-</head>
-<body>
-<!--Navbar-->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container-fluid">
-              <a class="navbar-brand" href="#home">Projeto Integrador 6</a>
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-              </button>
-              <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                  <li class="nav-item">
-                    <a class="nav-link " aria-current="page" href="index.html">Inicio</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link " href="dashboard-single.html">Dashboard Admin</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="dashboard.html">Dashboard</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link active" href="about.html">Sobre<span class="sr-only"> (Atual)</span></a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </nav>
-    <main>
-      <!--Sessão sobre-->
-      <div id="sobre">
-        <h1>O que fazemos</h1>
-        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-          <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-          </div>
-          <div class="carousel-inner">
-            <div class="carousel-item active">
-              <img src="/img/sobre1.png" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-              <img src="/img/sobre2.png" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-              <img src="/img/sobre3.png" class="d-block w-100" alt="...">
-            </div>
-          </div>
-          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Anterior</span>
-          </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Proximo</span>
-          </button>
-        </div>
-      </div>     
-    </main>
-    <!--Roda Pé-->
-    <footer class="sticky-footer">
-        <div class="container">
-          <div class="text-center">
-            <small>Projeto Integrador 2021</small>
-          </div>
-        </div>
-      </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-  
-</body>
-</html>
+{% block content %}
+<div class="row g-3 mb-3">
+  <div class="col-xl-7"><div class="panel about-text">
+    <div class="panel-title"><i class="bi bi-bullseye"></i> Objetivo</div>
+    <p>Implementar um sistema de monitoramento do tráfego de redes corporativas que registre informações
+      relevantes sobre o tráfego dos dispositivos, permitindo identificar oportunidades de redução de consumo
+      de dados e, consequentemente, de custos.</p>
+    <div class="row g-2 mt-1">
+      <div class="col-sm-6"><div class="alert-item ok"><i class="bi bi-hdd-network"></i>Tráfego por interface em tempo real</div></div>
+      <div class="col-sm-6"><div class="alert-item ok"><i class="bi bi-server"></i>Disponibilidade e latência de servidores</div></div>
+      <div class="col-sm-6"><div class="alert-item ok"><i class="bi bi-cpu"></i>Uso de CPU e memória</div></div>
+      <div class="col-sm-6"><div class="alert-item ok"><i class="bi bi-people"></i>Registro de dispositivos e acessos</div></div>
+      <div class="col-sm-6"><div class="alert-item ok"><i class="bi bi-bell"></i>Alertas automáticos</div></div>
+      <div class="col-sm-6"><div class="alert-item ok"><i class="bi bi-calendar3"></i>Projeção de consumo mensal</div></div>
+    </div>
+    <div class="panel-title mt-4"><i class="bi bi-stack"></i> Tecnologias</div>
+    <div class="d-flex flex-wrap gap-2">
+      <span class="badge text-bg-primary">Python</span><span class="badge text-bg-primary">Flask</span>
+      <span class="badge text-bg-primary">SQLite</span><span class="badge text-bg-primary">psutil</span>
+      <span class="badge text-bg-info">Chart.js</span><span class="badge text-bg-info">Bootstrap 5</span>
+      <span class="badge text-bg-info">DataTables</span><span class="badge text-bg-secondary">API REST (JSON)</span>
+    </div>
+  </div></div>
+  <div class="col-xl-5"><div class="panel">
+    <div class="panel-title"><i class="bi bi-images"></i> Registros do projeto</div>
+    <div id="carousel" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active"><img src="/img/sobre1.png" class="d-block w-100" alt="Projeto - imagem 1"></div>
+        <div class="carousel-item"><img src="/img/sobre2.png" class="d-block w-100" alt="Projeto - imagem 2"></div>
+        <div class="carousel-item"><img src="/img/sobre3.png" class="d-block w-100" alt="Projeto - imagem 3"></div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
+    </div>
+  </div></div>
+</div>
+
+<div class="row g-3">
+  <div class="col-xl-6"><div class="panel about-text">
+    <div class="panel-title"><i class="bi bi-book"></i> Introdução</div>
+      <p>Grandes eventos mundiais moldam as transformações no cenário corporativo e empresarial, que é evidenciado nas grandes revoluções que aconteceram durante a história. As revoluções industriais historicamente criaram as novas tendências mundiais de produção e organização de trabalho. A terceira revolução industrial, marcada pela substituição gradual da mecânica analógica pela digital, uso de microcomputadores e, principalmente, pela criação da internet em 1969, transformou a vida em todo o mundo e o modus operandi de grandes empresas, que abandonaram burocracias outrora necessárias e adotaram toda a praticidade do universo digital, mas que caminha a passos largos rumo a novas transformações, com as tendências da chamada 4ª Revolução Industrial  cada vez mais sendo naturalizadas.</p>
+      <p>Cada vez mais debatida no meio empresarial, a Transformação Digital tem imposto uma série de mudanças à rotina de grandes empresas. Ainda que seja apenas o começo dessa transformação, fica cada vez mais evidente que o preparo pra essa nova realidade no futuro será um fator determinante para a sobrevivência no mercado de trabalho e manutenção de posicionamentos estratégicos neste. O aumento do tráfego de redes corporativas tem sido vertiginoso. Dados apontam que até o ano de 2021, cerca de 278 exabytes de dados serão gerados mensalmente, o que demanda cada vez mais a modernização da infraestrutura e capacitação dos profissionais da área, a fim de manter a integridade e segurança dos dados intactas.</p>
+      <p>Dentre as novas tendências, é cada vez mais notória a iminência de dispositivos com conexão sem fio – wireless -, e como estas vem se tornando, com o passar do tempo, a principal forma de conexão e comunicação via redes. Segundo dados do relatório Visual Networking Index (VNI), a porcentagem de ligações gerais à internet, em 2021, será de 53% via Wi-Fi, 20% via celulares e 27% com origem cabeada. Portanto, torna-se importante o desenvolvimento de ferramentas para fazer o controle dos dados gerados e armazenados pelas corporações.</p>
+      <p>Com referência nas informações apresentadas, este projeto tem como propósito atuar no monitoramento do tráfego de redes corporativas através de um sistema de registro de informações pertinentes ao tráfego de rede de quaisquer dispositivos cadastrados, que abre margem para diversas implementações e projetos de redução de consumo de dados e, posteriormente, de custos.</p>
+  </div></div>
+  <div class="col-xl-6"><div class="panel about-text">
+    <div class="panel-title"><i class="bi bi-tools"></i> Materiais e métodos</div>
+      <p>Para que o projeto pudesse ser desenvolvido de maneira adequada e coerente as propostas que este possui, foi necessário o estudo e aprofundamento da área de infraestrutura de redes, cibersegurança e técnicas de desenvolvimento Web. Para definição do tema central do projeto, foram levantadas ideias sobre tópicos de priorização através do desenvolvimento de um processo de Brainstorming, aliado a questionamentos inspirados em softwares já disponíveis no mercado e estratificados com o uso da ferramenta de estratificação 5W2H, e elencados em uma matriz de Impacto-Esforço – dentro dos critérios de tempo, habilidades dos integrantes e infraestrutura de desenvolvimento - Isso tornou possível o desenvolvimento de um sistema de monitoramento de tráfego e de uma interface para uso de um usuário responsável pela administração do sistema, que fará a análise, controle e criação de indicadores dos dados e alterações conforme necessidade.</p>
+      <p>O projeto foi desenvolvido para sistemas web usando o desenvolvimento web básico, com auxílio de alguns frameworks e APIs (Application Programming Interfaces – Interfaces de Programação de Aplicações).</p>
+      <p>Python é uma linguagem de programação de alto nível, onde é interpretada e orientada a objetos. Ela é focada em priorizar a legibilidade do código sobre a velocidade ou expressividade, combinando uma sintaxe objetiva e clara com os recursos de sua biblioteca padrão e sendo possível a utilização de frameworks desenvolvidos por terceiros. Sendo muito utilizada por conta de suas características em processamento de textos, dados científicos e criação de CGIs (Common Gateway Interface – Interface Comum de Gateway) para páginas dinâmicas para a web.</p>
+    <blockquote class="mt-3">Hoje, a noção de “rede” é onipresente, e mesmo onipotente, em todas as disciplinas; nas ciências sociais, ela define sistemas de relações (redes sociais, de poder...) ou modos de organização (empresa-rede, por exemplo); na física, ela se identifica com a análise dos cristais e dos sistemas desordenados (percolação); em matemática, informática e inteligência artificial, ela define modelos de conexão (teoria dos grafos, cálculos sobre rede, conexionismo...); nas tecnologias, a rede é a estrutura elementar das telecomunicações, dos transportes ou da energia; em economia, ela permite pensar as novas relações entre atores na escala internacional (redes financeiras, comerciais...) ou elaborar modelos teóricos (economia de rede, intermediação); a biologia é apreciadora dessa noção de rede que, tradicionalmente, se identifica com a análise do corpo humano (redes sanguíneas, nervosas, imunológicas...).<br><small>— Pierre Musso, <cite>A filosofia da rede</cite></small></blockquote>
+  </div></div>
+</div>
+{% endblock %}

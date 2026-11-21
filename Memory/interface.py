@@ -1,20 +1,36 @@
-import PySimpleGUI as sg
-import CPUandMemory as main
+"""Janela que mostra CPU e RAM atualizando a cada segundo."""
+try:
+    import FreeSimpleGUI as sg   # fork gratuito e compatível do PySimpleGUI
+except ImportError:
+    import PySimpleGUI as sg
 
-sg.theme('DarkAmber')   # Add a touch of color
-# All the stuff inside your window.
-layout = [  [sg.Text('Some text on Row 1')],
-            [sg.Text('Enter something on Row 2'), sg.InputText()],
-            [sg.Text('Digite o seu  nome'), sg.InputText()],
-            [sg.Button('Ok'), sg.Button('Cancel')] ]
+import CPUandMemory as monitor
 
-# Create the Window
-window = sg.Window('Window Title', layout)
-# Event Loop to process "events" and get the "values" of the inputs
+sg.theme('DarkAmber')
+
+layout = [
+    [sg.Text('Monitor de CPU e Memória', font=('Arial', 14))],
+    [sg.Text('CPU:', size=(14, 1)), sg.ProgressBar(100, size=(25, 15), key='-CPU-BAR-'), sg.Text('', size=(8, 1), key='-CPU-')],
+    [sg.Text('RAM:', size=(14, 1)), sg.ProgressBar(100, size=(25, 15), key='-RAM-BAR-'), sg.Text('', size=(8, 1), key='-RAM-')],
+    [sg.Text('Frequência:', size=(14, 1)), sg.Text('', key='-FREQ-')],
+    [sg.Text('Temperatura:', size=(14, 1)), sg.Text('', key='-TEMP-')],
+    [sg.Button('Sair')],
+]
+
+window = sg.Window('Projeto Integrador VI - CPU e RAM', layout, finalize=True)
+
 while True:
-    event, values = window.read()
-    if event == sg.WIN_CLOSED or event == 'Cancel': # if user closes window or clicks cancel
+    event, _ = window.read(timeout=500)  # get_cpu_usage_pct já espera 0,5 s → ~1 atualização por segundo
+    if event in (sg.WIN_CLOSED, 'Sair'):
         break
-    print('You entered ', values[0])
-    print('O uso de RAM é {} %'.format(get_ram_usage_pct()))
+    cpu = monitor.get_cpu_usage_pct()
+    ram = monitor.get_ram_usage_pct()
+    temp = monitor.get_cpu_temp()
+    window['-CPU-BAR-'].update(cpu)
+    window['-CPU-'].update(f'{cpu:.1f} %')
+    window['-RAM-BAR-'].update(ram)
+    window['-RAM-'].update(f'{ram:.1f} %')
+    window['-FREQ-'].update(f'{monitor.get_cpu_frequency()} MHz')
+    window['-TEMP-'].update(f'{temp:.1f} °C' if temp is not None else 'indisponível')
+
 window.close()
